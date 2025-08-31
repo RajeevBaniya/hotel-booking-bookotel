@@ -24,6 +24,7 @@ export const AppProvider = ({ children }) => {
   const [authLoading, setAuthLoading] = useState(true);
   const [searchedCities, setSearchedCities] = useState([]);
   const [rooms, setRooms] = useState([]);
+  const [cities, setCities] = useState([]);
 
   const fetchRooms = async () => {
     try {
@@ -35,6 +36,19 @@ export const AppProvider = ({ children }) => {
       }
     } catch (error) {
       toast.error(error.message)
+    }
+  }
+
+  const fetchCities = async () => {
+    try {
+      const { data } = await axios.get('/api/cities')
+      if (data.success) {
+        setCities(data.cities)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      console.error("Error fetching cities:", error.message)
     }
   }
 
@@ -113,6 +127,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(()=>{
     fetchRooms();
+    fetchCities();
   },[])
 
   const value = {
@@ -134,7 +149,9 @@ export const AppProvider = ({ children }) => {
     searchedCities,
     setSearchedCities,
     rooms,
-    setRooms
+    setRooms,
+    cities,
+    fetchCities
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

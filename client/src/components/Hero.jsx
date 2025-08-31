@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { assets, cities } from "../assets/assets";
+import { assets } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 import DateInput from "../components/DateInput";
 
 const Hero = () => {
 
-  const {navigate, getToken, axios, setSearchedCities} = useAppContext()
+  const {navigate, getToken, axios, setSearchedCities, cities} = useAppContext()
   const [destination, setDestination] = useState("")
 
   const onSearch = async (e) => {
@@ -55,12 +55,12 @@ const Hero = () => {
             required
           />
           <datalist id="destinations">
-            {cities.map((city, index) => (
+            {cities && cities.length > 0 && cities.map((city, index) => (
               <option value={city} key={index} />
             ))}
           </datalist>
         </div>
-
+            
         <div>
           <div className="flex items-center gap-2">
             <img src={assets.calenderIcon} alt="" className="h-4" />

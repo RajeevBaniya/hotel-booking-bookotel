@@ -86,7 +86,6 @@ export const cities = [
   "Tokyo",
   "Sydney",
   "Mumbai",
-  "Bangalore",
 ];
 
 // Exclusive Offers Dummy Data

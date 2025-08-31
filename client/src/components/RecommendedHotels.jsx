@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import HotelCard from "./HotelCard";
 import Title from "./Title";
-import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -22,7 +21,7 @@ const RecommendedHotels = () => {
 
     const filteredHotels = rooms.filter(room => 
       searchedCities.some(city => 
-        room.hotel.city.toLowerCase().includes(city.toLowerCase())
+        room.hotel.city.toLowerCase() === city.toLowerCase()
       )
     );
     
@@ -33,8 +32,8 @@ const RecommendedHotels = () => {
     filterHotels();
   }, [rooms, searchedCities])
 
-  // Only show section if there are recommended hotels
-  if (recommended.length === 0) {
+  // Only show section if there are searched cities AND recommended hotels
+  if (!searchedCities || searchedCities.length === 0 || recommended.length === 0) {
     return null;
   }
 

@@ -9,6 +9,7 @@ import hotelRouter from "./routes/hotelRoutes.js";
 import connectCloudinary from "./configs/cloudinary.js";
 import roomRouter from "./routes/roomRoutes.js";
 import bookingRouter from "./routes/bookingRoutes.js";
+import cityRouter from "./routes/cityRoutes.js";
 import bodyParser from "body-parser";
 import { stripeWebhooks } from "./controllers/stripeWebhooks.js";
 
@@ -23,6 +24,9 @@ console.log("CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME ? "Set" 
 console.log("🔧 Initializing Cloudinary...");
 connectCloudinary();
 console.log("Cloudinary initialized");
+
+// Initialize predefined cities
+import { initializePredefinedCities } from "./controllers/cityController.js";
 
 const app = express();
 // CORS configuration for production and development
@@ -53,6 +57,12 @@ app.use(clerkMiddleware());
 app.use(async (req, res, next) => {
   try {
     await connectDB();
+    // Initialize predefined cities on first request
+    if (!global.citiesInitialized) {
+      await initializePredefinedCities();
+      global.citiesInitialized = true;
+    }
+
     next();
   } catch (err) {
     res.status(500).json({ success: false, message: "Database connection failed" });
@@ -67,6 +77,7 @@ app.use("/api/user", userRouter);
 app.use("/api/hotels", hotelRouter);
 app.use("/api/rooms", roomRouter);
 app.use("/api/bookings", bookingRouter);
+app.use("/api/cities", cityRouter);
 
 // Export for Vercel serverless
 export default app;

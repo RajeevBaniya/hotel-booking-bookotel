@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { roomsDummyData, assets, facilityIcons } from "../assets/assets";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { assets, facilityIcons } from "../assets/assets";
+import { useSearchParams } from "react-router-dom";
 import StarRating from "../components/StarRating";
 import { useAppContext } from "../context/AppContext";
 
@@ -136,7 +136,27 @@ const AllRooms = () => {
           </p>
         </div>
 
-        {filteredRooms.map((room) => (
+        {filteredRooms.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="text-6xl mb-4">🏨</div>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+              No hotels found
+            </h2>
+            <p className="text-gray-600 mb-4">
+              {searchParams.get('destination') 
+                ? `No hotels available in "${searchParams.get('destination')}"`
+                : "No hotels match your current filters"
+              }
+            </p>
+            <button
+              onClick={clearFilters}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
+        ) : (
+          filteredRooms.map((room) => (
           <div
             key={room._id}
             className="flex flex-col md:flex-row items-start py-10 gap-6 border-b border-gray-300 last:pb-30 last:border-0"
@@ -192,7 +212,8 @@ const AllRooms = () => {
               </p>
             </div>
           </div>
-        ))}
+        ))
+        )}
       </div>
       {/* filters */}
       <div className="bg-white w-80 border border-gray-300 text-gray-600 max-lg:mb-8 min-lg:mt-16">

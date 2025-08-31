@@ -9,9 +9,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://hote-booking-bookotel.onrender.com',
+        target: 'http://localhost:3001', // Use local backend for testing
         changeOrigin: true,
-        secure: true,
+        secure: false,
       },
     },
   }

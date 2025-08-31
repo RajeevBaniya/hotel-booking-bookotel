@@ -1,16 +1,45 @@
 import React, { useState } from "react";
-import { assets, cities } from "../assets/assets";
+import { assets } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
 
 const HotelReg = () => {
-  const { setShowHotelReg, axios, getToken, setIsOwner, navigate } =
+  const { setShowHotelReg, axios, getToken, setIsOwner, navigate, cities, fetchCities } =
     useAppContext();
 
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [contact, setContact] = useState("");
   const [city, setCity] = useState("");
+  const [showAddCity, setShowAddCity] = useState(false);
+  const [newCity, setNewCity] = useState("");
+
+  const addNewCity = async () => {
+    try {
+      if (!newCity.trim()) {
+        toast.error("Please enter a city name");
+        return;
+      }
+
+      const { data } = await axios.post(
+        "/api/cities/",
+        { name: newCity.trim() },
+        { headers: { Authorization: `Bearer ${await getToken()}` } }
+      );
+
+      if (data.success) {
+        toast.success("City added successfully!");
+        setCity(newCity.trim());
+        setNewCity("");
+        setShowAddCity(false);
+        fetchCities(); // Refresh cities list
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const onSubmitHandler = async (event) => {
     try {
@@ -109,20 +138,58 @@ const HotelReg = () => {
             <label htmlFor="city" className="font-medium text-gray-500">
               City
             </label>
-            <select
-              id="city"
-              onChange={(e) => setCity(e.target.value)}
-              value={city}
-              className="border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-secondary font-light"
-              required
-            >
-              <option value="">Select City</option>
-              {cities.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
+            {!showAddCity ? (
+              <select
+                id="city"
+                onChange={(e) => {
+                  if (e.target.value === "add-new") {
+                    setShowAddCity(true);
+                  } else {
+                    setCity(e.target.value);
+                  }
+                }}
+                value={city}
+                className="border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-secondary font-light"
+                required
+              >
+                <option value="">Select City</option>
+                {cities.map((cityName) => (
+                  <option key={cityName} value={cityName}>
+                    {cityName}
+                  </option>
+                ))}
+                <option value="add-new">+ Add New City</option>
+              </select>
+            ) : (
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={newCity}
+                  onChange={(e) => setNewCity(e.target.value)}
+                  placeholder="Enter city name"
+                  className="border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-secondary font-light"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={addNewCity}
+                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm"
+                  >
+                    Add City
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAddCity(false);
+                      setNewCity("");
+                    }}
+                    className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
           <button className="bg-primary hover:bg-secondary transition-all text-white mr-auto px-6 py-2 rounded cursor-pointer mt-6">
             Register

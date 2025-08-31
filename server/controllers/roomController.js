@@ -12,7 +12,7 @@ export const createRoom = async (req, res) => {
 
     // Upload image to cloudinary
     const uploadImages = req.files.map(async (file) => {
-      const response = await cloudinary.uploader.upload(file.path);c
+      const response = await cloudinary.uploader.upload(file.path);
       return response.secure_url;
     });
 

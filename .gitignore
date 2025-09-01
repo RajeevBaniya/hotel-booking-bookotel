@@ -3,3 +3,7 @@ node_modules
 
 # Deployment
 .vercel
+
+# Environment
+.env
+.env.*

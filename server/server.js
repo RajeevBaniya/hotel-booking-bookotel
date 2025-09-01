@@ -21,7 +21,7 @@ console.log("CLERK_SECRET_KEY:", process.env.CLERK_SECRET_KEY ? "Set" : "Missing
 console.log("CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME ? "Set" : "Missing");
 
 // Initialize services (Cloudinary does internal caching; safe to call)
-console.log("🔧 Initializing Cloudinary...");
+console.log("Initializing Cloudinary...");
 connectCloudinary();
 console.log("Cloudinary initialized");
 

@@ -1,7 +1,7 @@
 # Bookotel
 Live - https://bookotel.vercel.app/
 
-Hotel booking application with real-time payments and authentication.
+Hotel booking platform built with MERN stack, featuring seamless room reservations, real-time availability checks and secure payment processing.
 
 ## Tech Stack
 - MERN Stack

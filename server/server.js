@@ -82,8 +82,7 @@ app.use("/api/cities", cityRouter);
 // Export for Vercel serverless
 export default app;
 
-// Enable local development with `node server.js`
-// Don't start server on Vercel (serverless), but do start on Render and local
+// to  Enable local development with `node server.js`
 if (!process.env.VERCEL) {
   const PORT = process.env.PORT || 3001;
   console.log("Starting server on port:", PORT);

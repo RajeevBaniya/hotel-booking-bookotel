@@ -78,8 +78,6 @@ export const resetCities = async (req, res) => {
 // Initialize predefined cities (run once)
 export const initializePredefinedCities = async () => {
   try {
-    // First, remove any existing cities to start fresh
-    await City.deleteMany({});
     const predefinedCities = [
       "Dubai",
       "Singapore", 
@@ -90,15 +88,31 @@ export const initializePredefinedCities = async () => {
       "Mumbai"
     ];
 
-    for (const cityName of predefinedCities) {
-      await City.create({
-        name: cityName,
-        isPredefined: true
-      });
+    // If collection already has cities, assume initialized
+    const existingCount = await City.estimatedDocumentCount();
+    if (existingCount > 0) {
+      return;
     }
-    
+
+    // Idempotent upserts to avoid duplicates on concurrent runs
+    const operations = predefinedCities.map((cityName) => ({
+      updateOne: {
+        filter: { name: cityName },
+        update: {
+          $setOnInsert: { name: cityName, isPredefined: true },
+        },
+        upsert: true,
+      },
+    }));
+
+    await City.bulkWrite(operations, { ordered: false });
     console.log("✅ Predefined cities initialized");
   } catch (error) {
+    // Ignore duplicate errors from concurrent upserts
+    if (error && error.code === 11000) {
+      console.log("⚠️ Cities already initialized (duplicate key)");
+      return;
+    }
     console.error("❌ Error initializing predefined cities:", error.message);
   }
 };

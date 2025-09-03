@@ -57,12 +57,6 @@ app.use(clerkMiddleware());
 app.use(async (req, res, next) => {
   try {
     await connectDB();
-    // Initialize predefined cities on first request
-    if (!global.citiesInitialized) {
-      await initializePredefinedCities();
-      global.citiesInitialized = true;
-    }
-
     next();
   } catch (err) {
     res.status(500).json({ success: false, message: "Database connection failed" });
@@ -81,6 +75,16 @@ app.use("/api/cities", cityRouter);
 
 // Export for Vercel serverless
 export default app;
+
+(async () => {
+  try {
+    await connectDB();
+    await initializePredefinedCities();
+    global.citiesInitialized = true;
+  } catch (e) {
+    console.error("Failed to initialize cities on startup:", e.message);
+  }
+})();
 
 // to  Enable local development with `node server.js`
 if (!process.env.VERCEL) {

@@ -1,4 +1,5 @@
 import React from "react";
+import Title from "./Title";
 import exclusiveOfferGif from "../assets/Dark Green and White Minimalist Geometric Shape House For Sale Video.gif";
 
 // Background Animation Component
@@ -10,16 +11,13 @@ const BackgroundAnimation = () => (
   </>
 );
 
-// Header Component
 const SectionHeader = () => {
   return (
     <div className="text-center mb-8 md:mb-12 relative z-10 px-4">
-      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-playfair text-gray-800 mb-3 md:mb-4">
-        Discover Amazing Destinations
-      </h2>
-      <p className="text-xs sm:text-sm md:text-base text-gray-500/90 mt-2 max-w-174 px-4">
-        Explore our curated collection of stunning visuals and experiences that showcase the world's most beautiful destinations
-      </p>
+      <Title
+        title="Discover Amazing Destinations"
+        subTitle="Explore our curated collection of stunning visuals and experiences that showcase the world's most beautiful destinations"
+      />
     </div>
   );
 };

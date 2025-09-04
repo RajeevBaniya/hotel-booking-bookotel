@@ -1,10 +1,18 @@
 import City from "../models/City.js";
+import { getJSON, setJSON, del, isCacheEnabled } from "../utils/cache.js";
 
 // Get all cities
 export const getAllCities = async (req, res) => {
   try {
+    const cacheKey = "cities:all";
+    const cached = await getJSON(cacheKey);
+    if (cached) {
+      return res.json({ success: true, cities: cached });
+    }
     const cities = await City.find().sort({ name: 1 });
-    res.json({ success: true, cities: cities.map(city => city.name) });
+    const names = cities.map(city => city.name);
+    await setJSON(cacheKey, names, 21600); // 6 hours
+    res.json({ success: true, cities: names });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
@@ -35,6 +43,10 @@ export const addCity = async (req, res) => {
       addedBy: userId,
       isPredefined: false
     });
+
+    if (isCacheEnabled()) {
+      await del("cities:all");
+    }
 
     res.json({ 
       success: true, 
@@ -67,10 +79,13 @@ export const resetCities = async (req, res) => {
         isPredefined: true
       });
     }
+    if (isCacheEnabled()) {
+      await del("cities:all");
+    }
     
     res.json({ success: true, message: "Cities reset successfully", cities: predefinedCities });
   } catch (error) {
-    console.error("❌ Error resetting cities:", error.message);
+    console.error("Error resetting cities:", error.message);
     res.json({ success: false, message: error.message });
   }
 };
@@ -106,13 +121,13 @@ export const initializePredefinedCities = async () => {
     }));
 
     await City.bulkWrite(operations, { ordered: false });
-    console.log("✅ Predefined cities initialized");
+    console.log("Predefined cities initialized");
   } catch (error) {
     // Ignore duplicate errors from concurrent upserts
     if (error && error.code === 11000) {
-      console.log("⚠️ Cities already initialized (duplicate key)");
+      console.log("Cities already initialized (duplicate key)");
       return;
     }
-    console.error("❌ Error initializing predefined cities:", error.message);
+    console.error("Error initializing predefined cities:", error.message);
   }
 };

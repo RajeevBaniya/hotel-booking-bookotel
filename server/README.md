@@ -11,6 +11,11 @@ STRIPE_WEBHOOK_SECRET=your_key
 CLERK_WEBHOOK_SECRET=your_key
 SENDER_EMAIL=...
 SENDER_PASS=...
+
+# caching - Upstash Redis
+ENABLE_CACHE=true
+REDIS_URL=https://your-upstash-rest-url
+REDIS_TOKEN=your-upstash-rest-token
 ```
 
 ## Quick Start
@@ -18,6 +23,11 @@ SENDER_PASS=...
 npm install
 npm start
 ```
+
+## Caching 
+- Read through cache for `GET /api/rooms` and `GET /api/cities` using Upstash Redis.
+- Enable by setting `ENABLE_CACHE=true` and providing `REDIS_URL` and `REDIS_TOKEN`.
+- Cache TTLs: rooms 120s, cities 6h. Cache is invalidated on writes.
 
 ## Webhooks
 - Stripe: POST /api/stripe (checkout.session.completed)

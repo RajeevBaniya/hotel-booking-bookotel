@@ -1,6 +1,7 @@
 import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js";
 import { v2 as cloudinary } from "cloudinary";
+import { getJSON, setJSON, del, isCacheEnabled } from "../utils/cache.js";
 
 //  Api to create a new room for a hotel
 export const createRoom = async (req, res) => {
@@ -27,6 +28,10 @@ export const createRoom = async (req, res) => {
       amenities: JSON.parse(amenities),
       images,
     });
+    // Invalidate rooms cache
+    if (isCacheEnabled()) {
+      await del("rooms:all");
+    }
     res.json({ success: true, message: "Room created successfully" });
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -36,6 +41,12 @@ export const createRoom = async (req, res) => {
 // API to get all rooms
 export const getRooms = async (req, res) => {
   try {
+    // Try cache first
+    let cached = await getJSON("rooms:all");
+    if (cached) {
+      return res.json({ success: true, rooms: cached });
+    }
+
     const rooms = await Room.find({ isAvailable: true })
       .populate({
         path: "hotel",
@@ -45,6 +56,8 @@ export const getRooms = async (req, res) => {
         },
       })
       .sort({ createdAt: -1 });
+    // Cache the result (short TTL)
+    await setJSON("rooms:all", rooms, 120);
     res.json({ success: true, rooms });
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -71,6 +84,9 @@ export const toggleRoomAvailability = async (req, res) => {
     const roomData = await Room.findById(roomId);
     roomData.isAvailable = !roomData.isAvailable;
     await roomData.save();
+    if (isCacheEnabled()) {
+      await del("rooms:all");
+    }
     res.json({ success: true, message: "Room availability Updated" });
   } catch (error) {
     res.json({ success: false, message: error.message });

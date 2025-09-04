@@ -4,9 +4,11 @@ Live - https://bookotel.vercel.app/
 Hotel booking platform built with MERN stack, featuring seamless room reservations, real-time availability checks and secure payment processing.
 
 ## Tech Stack
-- MERN Stack
+- Frontend: React + Vite, Tailwind CSS
+- Backend: Express (Node.js), Mongoose (MongoDB)
 - Auth: Clerk
 - Payments: Stripe
+- Caching: Upstash Redis (optional, env‑toggled)
 
 ## Project Structure
 ```
@@ -32,4 +34,10 @@ cd client && npm run dev
 ```
 
 
-See individual README files in client/ and server/ for detailed setup.
+## Notes
+- The app can run without Redis. To enable caching in production, set these on the backend:
+  - `ENABLE_CACHE=true`, `REDIS_URL`, `REDIS_TOKEN`
+- Frontend talks to the backend via `VITE_BACKEND_URL`.
+- For deploys: client on Vercel, server on Render.
+
+See `client/README.md` and `server/README.md` for details.

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 const About = () => {
   const SLIDE_INTERVAL_MS = 5000;
   const images = [
-    "/images/room.jpeg",
     "/images/room2.jpg",
     "/images/room3.jpg",
     "/images/room4.jpeg",

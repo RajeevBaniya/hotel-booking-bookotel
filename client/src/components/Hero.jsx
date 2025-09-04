@@ -10,16 +10,20 @@ const Hero = () => {
 
   const onSearch = async (e) => {
     e.preventDefault();
-    navigate(`/rooms?destination=${destination}`)
+    const query = (destination || "").trim();
+    if (!query) return;
+    navigate(`/rooms?destination=${encodeURIComponent(query)}`)
     
     try {
       // call api to save recent searched city
-      await axios.post('/api/user/store-recent-search', {recentSearchedCity: destination}, {
+      await axios.post('/api/user/store-recent-search', {recentSearchedCity: query}, {
         headers: { Authorization: `Bearer ${await getToken()}` }
       });
 
       // Replace searchedCities with only the current destination
-      setSearchedCities([destination]);
+      setSearchedCities([query]);
+      // Persist locally so Home can rehydrate after navigation on mobile
+      try { localStorage.setItem('lastSearchedCity', query); } catch {}
     } catch (error) {
       console.error("Error saving recent search:", error);
     }

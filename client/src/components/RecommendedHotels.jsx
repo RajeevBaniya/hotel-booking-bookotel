@@ -13,17 +13,21 @@ const RecommendedHotels = () => {
   const { rooms, searchedCities } = useAppContext();
   const [recommended, setRecommended] = useState([]);
 
+  const normalize = (s) => (s || "").toString().trim().toLowerCase();
+
   const filterHotels = () => {
     if (!searchedCities || searchedCities.length === 0) {
       setRecommended([]);
       return;
     }
 
-    const filteredHotels = rooms.filter(room => 
-      searchedCities.some(city => 
-        room.hotel.city.toLowerCase() === city.toLowerCase()
-      )
-    );
+    const filteredHotels = rooms.filter((room) => {
+      const roomCity = normalize(room?.hotel?.city);
+      return searchedCities.some((city) => {
+        const q = normalize(city);
+        return roomCity === q || roomCity.includes(q);
+      });
+    });
     
     setRecommended(filteredHotels);
   }

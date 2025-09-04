@@ -128,6 +128,11 @@ export const AppProvider = ({ children }) => {
   useEffect(()=>{
     fetchRooms();
     fetchCities();
+    // Rehydrate last searched city for mobile back/forward navigation
+    try {
+      const last = localStorage.getItem('lastSearchedCity');
+      if (last) setSearchedCities([last]);
+    } catch {}
   },[])
 
   const value = {

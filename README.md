@@ -37,7 +37,6 @@ cd client && npm run dev
 ## Notes
 - The app can run without Redis. To enable caching in production, set these on the backend:
   - `ENABLE_CACHE=true`, `REDIS_URL`, `REDIS_TOKEN`
-- Frontend talks to the backend via `VITE_BACKEND_URL`.
-- For deploys: client on Vercel, server on Render.
+- Frontend (vercel) connects to the backend via `VITE_BACKEND_URL`(render).
 
 See `client/README.md` and `server/README.md` for details.

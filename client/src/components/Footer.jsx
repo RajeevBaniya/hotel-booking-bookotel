@@ -66,7 +66,7 @@ const Footer = () => {
           <p className="font-playfair text-lg text-gray-800">COMPANY</p>
           <ul className="mt-3 flex flex-col gap-2 text-sm">
             <li>
-              <a href="#">About</a>
+              <a href="/about">About</a>
             </li>
             <li>
               <a href="#">Press</a>

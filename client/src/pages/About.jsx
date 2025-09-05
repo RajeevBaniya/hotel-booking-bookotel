@@ -136,7 +136,7 @@ const About = () => {
             <div className="mt-6 grid grid-cols-2 gap-4">
               <div className="rounded-xl bg-white shadow-sm border border-[#bfdbfe] p-4">
                 <p className="text-sm text-gray-500">Average Check‑In Time</p>
-                <p className="text-2xl font-bold text-gray-900">2 min</p>
+                <p className="text-2xl font-bold text-gray-900">2-5 min</p>
               </div>
               <div className="rounded-xl bg-white shadow-sm border border-[#bfdbfe] p-4">
                 <p className="text-sm text-gray-500">Partner Hotels</p>

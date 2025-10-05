@@ -8,7 +8,6 @@ Hotel booking platform built with MERN stack, featuring seamless room reservatio
 - Backend: Express (Node.js), Mongoose (MongoDB)
 - Auth: Clerk
 - Payments: Stripe
-- Redis
 
 ## Project Structure
 ```

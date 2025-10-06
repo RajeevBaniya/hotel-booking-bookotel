@@ -38,4 +38,4 @@ cd client && npm run dev
   - `ENABLE_CACHE=true`, `REDIS_URL`, `REDIS_TOKEN`
 - Frontend (vercel) connects to the backend via `VITE_BACKEND_URL`(render).
 
-See `client/README.md` and `server/README.md` for details.
+See `client/README.md` and `server/README.md` for more  details.

@@ -50,7 +50,7 @@ const RecommendedHotels = () => {
 
       <div className="w-full mt-15 relative max-w-7xl mx-auto">
         <Swiper
-          slidesPerView={"auto"}
+          slidesPerView={1}
           spaceBetween={20}
           navigation={false}
           centeredSlides={true}
@@ -77,6 +77,11 @@ const RecommendedHotels = () => {
           grabCursor={true}
           modules={[Pagination, Autoplay]}
           breakpoints={{
+            640: {
+              slidesPerView: 1,
+              spaceBetween: 20,
+              centeredSlides: true,
+            },
             768: {
               slidesPerView: 2,
               spaceBetween: 20,

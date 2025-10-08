@@ -46,6 +46,9 @@ const FeaturedDestination = () => {
             pauseOnMouseEnter: true,
           }}
           loop={true}
+          loopAdditionalSlides={4}
+          loopPreventsSliding={false}
+          watchOverflow={false}
           allowTouchMove={true}
           simulateTouch={true}
           grabCursor={true}

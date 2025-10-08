@@ -1,7 +1,6 @@
 import React from "react";
 import HotelCard from "./HotelCard";
 import Title from "./Title";
-import { useNavigate } from "react-router-dom";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
@@ -22,16 +21,11 @@ const FeaturedDestination = () => {
         subTitle="Experience our handpicked properties, where premium comfort meets unforgettable moments in stunning locations."
       />
 
-      <div className="w-full mt-15 relative max-w-7xl mx-auto">
+      <div className="w-full mt-15 relative">
         <Swiper
           slidesPerView={1}
           spaceBetween={20}
           navigation={false}
-          centeredSlides={true}
-          centeredSlidesBounds={true}
-          centerInsufficientSlides={true}
-          slidesOffsetBefore={0}
-          slidesOffsetAfter={0}
           pagination={{
             clickable: true,
             el: ".swiper-custom-pagination",
@@ -46,33 +40,22 @@ const FeaturedDestination = () => {
             pauseOnMouseEnter: true,
           }}
           loop={true}
-          loopAdditionalSlides={4}
-          loopPreventsSliding={false}
-          watchOverflow={false}
           allowTouchMove={true}
           simulateTouch={true}
           grabCursor={true}
           modules={[Pagination, Autoplay]}
           breakpoints={{
             640: {
-              slidesPerView: 1,
-              spaceBetween: 20,
-              centeredSlides: true,
-            },
-            768: {
               slidesPerView: 2,
               spaceBetween: 20,
-              centeredSlides: false,
             },
             1024: {
               slidesPerView: 3,
               spaceBetween: 30,
-              centeredSlides: false,
             },
             1280: {
               slidesPerView: 4,
               spaceBetween: 30,
-              centeredSlides: false,
             },
           }}
           className="mySwiper"

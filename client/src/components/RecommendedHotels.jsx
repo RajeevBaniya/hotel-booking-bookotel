@@ -48,16 +48,11 @@ const RecommendedHotels = () => {
         subTitle="Discover our handpicked selection of exceptional properties around the world, offering unparalleled luxury and unforgettable experiences."
       />
 
-      <div className="w-full mt-15 relative max-w-7xl mx-auto">
+      <div className="w-full mt-15 relative">
         <Swiper
           slidesPerView={1}
           spaceBetween={20}
           navigation={false}
-          centeredSlides={true}
-          centeredSlidesBounds={true}
-          centerInsufficientSlides={true}
-          slidesOffsetBefore={0}
-          slidesOffsetAfter={0}
           pagination={{
             clickable: true,
             el: ".swiper-recommended-pagination",
@@ -72,33 +67,22 @@ const RecommendedHotels = () => {
             pauseOnMouseEnter: true,
           }}
           loop={true}
-          loopAdditionalSlides={4}
-          loopPreventsSliding={false}
-          watchOverflow={false}
           allowTouchMove={true}
           simulateTouch={true}
           grabCursor={true}
           modules={[Pagination, Autoplay]}
           breakpoints={{
             640: {
-              slidesPerView: 1,
-              spaceBetween: 20,
-              centeredSlides: true,
-            },
-            768: {
               slidesPerView: 2,
               spaceBetween: 20,
-              centeredSlides: false,
             },
             1024: {
               slidesPerView: 3,
               spaceBetween: 30,
-              centeredSlides: false,
             },
             1280: {
               slidesPerView: 4,
               spaceBetween: 30,
-              centeredSlides: false,
             },
           }}
           className="mySwiper"

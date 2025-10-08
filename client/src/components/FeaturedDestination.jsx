@@ -47,7 +47,7 @@ const FeaturedDestination = () => {
           grabCursor={true}
           modules={[Pagination, Autoplay]}
           breakpoints={{
-            640: {
+            768: {
               slidesPerView: 2,
               spaceBetween: 20,
               centeredSlides: false,

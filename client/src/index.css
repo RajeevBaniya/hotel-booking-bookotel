@@ -70,6 +70,19 @@
   padding: 10px 5px;
 }
 
+/* Ensure perfect centering for auto-width slides on phones */
+@media (max-width: 767px) {
+  .mySwiper {
+    overflow: visible;
+  }
+  .mySwiper .swiper-slide {
+    width: auto !important; /* respect card's max width */
+  }
+  .mySwiper .swiper-wrapper {
+    justify-content: center !important; /* center single slide across all phone widths */
+  }
+}
+
 .mySwiper .swiper-slide a {
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
     0 8px 10px -6px rgba(0, 0, 0, 0.05);

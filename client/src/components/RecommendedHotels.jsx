@@ -50,10 +50,14 @@ const RecommendedHotels = () => {
 
       <div className="w-full mt-15 relative max-w-7xl mx-auto">
         <Swiper
-          slidesPerView={1}
+          slidesPerView={"auto"}
           spaceBetween={20}
           navigation={false}
           centeredSlides={true}
+          centeredSlidesBounds={true}
+          centerInsufficientSlides={true}
+          slidesOffsetBefore={0}
+          slidesOffsetAfter={0}
           pagination={{
             clickable: true,
             el: ".swiper-recommended-pagination",

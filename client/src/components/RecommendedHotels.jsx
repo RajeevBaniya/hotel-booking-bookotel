@@ -48,11 +48,12 @@ const RecommendedHotels = () => {
         subTitle="Discover our handpicked selection of exceptional properties around the world, offering unparalleled luxury and unforgettable experiences."
       />
 
-      <div className="w-full mt-15 relative">
+      <div className="w-full mt-15 relative max-w-7xl mx-auto">
         <Swiper
           slidesPerView={1}
           spaceBetween={20}
           navigation={false}
+          centeredSlides={true}
           pagination={{
             clickable: true,
             el: ".swiper-recommended-pagination",
@@ -75,14 +76,17 @@ const RecommendedHotels = () => {
             640: {
               slidesPerView: 2,
               spaceBetween: 20,
+              centeredSlides: false,
             },
             1024: {
               slidesPerView: 3,
               spaceBetween: 30,
+              centeredSlides: false,
             },
             1280: {
               slidesPerView: 4,
               spaceBetween: 30,
+              centeredSlides: false,
             },
           }}
           className="mySwiper"

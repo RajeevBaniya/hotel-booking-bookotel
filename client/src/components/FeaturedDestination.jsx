@@ -22,11 +22,12 @@ const FeaturedDestination = () => {
         subTitle="Experience our handpicked properties, where premium comfort meets unforgettable moments in stunning locations."
       />
 
-      <div className="w-full mt-15 relative">
+      <div className="w-full mt-15 relative max-w-7xl mx-auto">
         <Swiper
           slidesPerView={1}
           spaceBetween={20}
           navigation={false}
+          centeredSlides={true}
           pagination={{
             clickable: true,
             el: ".swiper-custom-pagination",
@@ -49,14 +50,17 @@ const FeaturedDestination = () => {
             640: {
               slidesPerView: 2,
               spaceBetween: 20,
+              centeredSlides: false,
             },
             1024: {
               slidesPerView: 3,
               spaceBetween: 30,
+              centeredSlides: false,
             },
             1280: {
               slidesPerView: 4,
               spaceBetween: 30,
+              centeredSlides: false,
             },
           }}
           className="mySwiper"

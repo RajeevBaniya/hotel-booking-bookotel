@@ -12,7 +12,29 @@ import { Pagination, Autoplay } from "swiper/modules";
 import { useAppContext } from "../context/AppContext";
 
 const FeaturedDestination = () => {
-  const { rooms, navigate } = useAppContext();
+  const { rooms, navigate, roomsLoading } = useAppContext();
+
+  if (roomsLoading) {
+    return (
+      <div className="flex flex-col items-center px-6 md:px-16 lg:px-24 bg-slate-50 py-20">
+        <Title
+          title="Featured Destinations"
+          subTitle="Experience our handpicked properties, where premium comfort meets unforgettable moments in stunning locations."
+        />
+        <div className="w-full mt-15 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="animate-pulse">
+              <div className="bg-gray-300 h-[200px] rounded-t-xl"></div>
+              <div className="bg-white p-4 rounded-b-xl">
+                <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return rooms.length > 0 && (
     <div className="flex flex-col items-center px-6 md:px-16 lg:px-24 bg-slate-50 py-20">

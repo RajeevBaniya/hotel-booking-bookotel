@@ -10,7 +10,7 @@ import { Pagination, Autoplay } from "swiper/modules";
 import { useAppContext } from "../context/AppContext";
 
 const RecommendedHotels = () => {
-  const { rooms, searchedCities } = useAppContext();
+  const { rooms, searchedCities, roomsLoading } = useAppContext();
   const [recommended, setRecommended] = useState([]);
 
   const normalize = (s) => (s || "").toString().trim().toLowerCase();
@@ -35,6 +35,29 @@ const RecommendedHotels = () => {
   useEffect(() => {
     filterHotels();
   }, [rooms, searchedCities])
+
+  // Show loading state
+  if (roomsLoading && searchedCities && searchedCities.length > 0) {
+    return (
+      <div className="flex flex-col items-center px-6 md:px-16 lg:px-24 bg-slate-50 py-20">
+        <Title
+          title="Recommended Hotels"
+          subTitle="Discover our handpicked selection of exceptional properties around the world, offering unparalleled luxury and unforgettable experiences."
+        />
+        <div className="w-full mt-15 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="animate-pulse">
+              <div className="bg-gray-300 h-[200px] rounded-t-xl"></div>
+              <div className="bg-white p-4 rounded-b-xl">
+                <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   // Only show section if there are searched cities AND recommended hotels
   if (!searchedCities || searchedCities.length === 0 || recommended.length === 0) {

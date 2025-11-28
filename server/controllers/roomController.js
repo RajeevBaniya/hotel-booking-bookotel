@@ -48,16 +48,19 @@ export const getRooms = async (req, res) => {
     }
 
     const rooms = await Room.find({ isAvailable: true })
+      .select('roomType pricePerNight amenities images hotel createdAt')
       .populate({
         path: "hotel",
+        select: "name address city",
         populate: {
           path: "owner",
           select: "image",
         },
       })
-      .sort({ createdAt: -1 });
-    // Cache the result (short TTL)
-    await setJSON("rooms:all", rooms, 120);
+      .sort({ createdAt: -1 })
+      .lean();
+    // Cache the result with longer TTL for better performance
+    await setJSON("rooms:all", rooms, 300);
     res.json({ success: true, rooms });
   } catch (error) {
     res.json({ success: false, message: error.message });

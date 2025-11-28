@@ -15,6 +15,7 @@ const HotelCard = ({ room, index }) => {
           src={room.images[0]}
           alt={`Room at ${room.hotel.name}`}
           className="w-full h-full object-cover"
+          loading="lazy"
         />
       </div>
 

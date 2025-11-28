@@ -25,9 +25,11 @@ export const AppProvider = ({ children }) => {
   const [searchedCities, setSearchedCities] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [cities, setCities] = useState([]);
+  const [roomsLoading, setRoomsLoading] = useState(true);
 
   const fetchRooms = async () => {
     try {
+      setRoomsLoading(true);
       const { data } = await axios.get('/api/rooms')
       if (data.success) {
         setRooms(data.rooms)
@@ -36,6 +38,8 @@ export const AppProvider = ({ children }) => {
       }
     } catch (error) {
       toast.error(error.message)
+    } finally {
+      setRoomsLoading(false);
     }
   }
 
@@ -100,7 +104,7 @@ export const AppProvider = ({ children }) => {
     } catch (error) {
       toast.error(error.message);
     }
-  }, [axios, getToken, user]);
+  }, [getToken, user]);
 
   useEffect(() => {
     if (!isLoaded) {
@@ -126,13 +130,15 @@ export const AppProvider = ({ children }) => {
   }, [isLoaded, isSignedIn, user, fetchUser]);
 
   useEffect(()=>{
-    fetchRooms();
-    fetchCities();
+    // Fetch rooms and cities in parallel for faster loading
+    Promise.all([fetchRooms(), fetchCities()]);
     // Rehydrate last searched city for mobile back/forward navigation
     try {
       const last = localStorage.getItem('lastSearchedCity');
       if (last) setSearchedCities([last]);
-    } catch {}
+    } catch {
+      // ignore errors
+    }
   },[])
 
   const value = {
@@ -156,7 +162,8 @@ export const AppProvider = ({ children }) => {
     rooms,
     setRooms,
     cities,
-    fetchCities
+    fetchCities,
+    roomsLoading
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

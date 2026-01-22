@@ -26,11 +26,14 @@ const clerkWebhooks = async (req, res) => {
     
     switch (type) {
       case "user.created": {
+        const fullName = (data.first_name + " " + data.last_name).trim().toUpperCase();
         const userData = {
           _id: data.id,
           email: data.email_addresses[0].email_address,
-          username: data.first_name + " " + data.last_name,
+          username: fullName || "USER",
           image: data.image_url,
+          role: "user",
+          recentSearchedCities: [],
         }
         await User.create(userData);
         console.log("✅ User created in database:", data.id);
@@ -38,10 +41,10 @@ const clerkWebhooks = async (req, res) => {
       }
 
       case "user.updated": {
+        const fullName = (data.first_name + " " + data.last_name).trim().toUpperCase();
         const userData = {
-          _id: data.id,
           email: data.email_addresses[0].email_address,
-          username: data.first_name + " " + data.last_name,
+          username: fullName || "USER",
           image: data.image_url,
         }
         await User.findByIdAndUpdate(data.id, userData);

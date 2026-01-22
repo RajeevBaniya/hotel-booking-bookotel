@@ -56,17 +56,22 @@ export const createBooking = async (req, res) => {
       return res.json({ success: false, message: "User not authenticated" });
     }
     
-    // Ensure user exists in database (create if doesn't exist)
+    // Ensure user exists in database
     let user = await User.findById(userId);
     if (!user) {
-      // User doesn't exist in our DB, but exists in Clerk - create them
-      console.log("Creating missing user:", userId);
-      user = await User.create({
-        _id: userId,
-        email: "temp@example.com", // Will be updated by webhook later
-        username: "User",
-        image: "https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18yZ1h1N0JHSDRVcVBUeEEyOXZkc1lmVENjRlMiLCJyaWQiOiJ1c2VyXzJnWXNQU0VTVVdwOWFoUkFIdldQTDBCNnZlSSIsImluaXRpYWxzIjoiUlMifQ", // Default avatar
-      });
+      // User doesn't exist in our DB yet - webhook may not have fired
+      // Wait a moment and retry once
+      console.log("⏳ User not found, waiting for webhook to sync:", userId);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      user = await User.findById(userId);
+      
+      if (!user) {
+        console.error("❌ User still not found after waiting:", userId);
+        return res.json({ 
+          success: false, 
+          message: "User account not synced yet. Please try again in a moment." 
+        });
+      }
     }
     
     const userIdForBooking = user._id;
@@ -102,11 +107,11 @@ export const createBooking = async (req, res) => {
 
     const mailOptions = {
       from: process.env.SENDER_EMAIL,
-      to: req.user.email,
+      to: user.email,
       subject: "Hotel Booking Details",
       html: `
         <h2>Your Booking Details</h2>
-        <p>Dear ${req.user.username},</p>
+        <p>Dear ${user.username},</p>
         <p>Thank you for choosing us. Here are your booking details:</p>
         <ul>
           <li><strong>Booking ID:</strong> ${booking._id}</li>

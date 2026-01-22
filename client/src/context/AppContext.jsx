@@ -33,7 +33,7 @@ export const AppProvider = ({ children }) => {
       const { data } = await axios.get('/api/rooms')
       if (data.success) {
         setRooms(data.rooms)
-      }else {
+      } else {
         toast.error(data.message)
       }
     } catch (error) {
@@ -129,7 +129,7 @@ export const AppProvider = ({ children }) => {
     }
   }, [isLoaded, isSignedIn, user, fetchUser]);
 
-  useEffect(()=>{
+  useEffect(() => {
     // Fetch rooms and cities in parallel for faster loading
     Promise.all([fetchRooms(), fetchCities()]);
     // Rehydrate last searched city for mobile back/forward navigation
@@ -139,7 +139,7 @@ export const AppProvider = ({ children }) => {
     } catch {
       // ignore errors
     }
-  },[])
+  }, [])
 
   const value = {
     currency,

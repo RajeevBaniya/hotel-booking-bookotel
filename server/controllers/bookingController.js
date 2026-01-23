@@ -1,4 +1,4 @@
-import transporter from "../configs/nodemailer.js";
+import { sendEmail } from "../services/email.js";
 import Booking from "../models/Booking.js";
 import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js";
@@ -105,30 +105,29 @@ export const createBooking = async (req, res) => {
       totalPrice,
     });
 
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: user.email,
-      subject: "Hotel Booking Details",
-      html: `
-        <h2>Your Booking Details</h2>
-        <p>Dear ${user.username},</p>
-        <p>Thank you for choosing us. Here are your booking details:</p>
-        <ul>
-          <li><strong>Booking ID:</strong> ${booking._id}</li>
-          <li><strong>Hotel Name:</strong> ${roomData.hotel.name}</li>
-          <li><strong>Location:</strong> ${roomData.hotel.address}</li>
-          <li><strong>Date:</strong> ${booking.checkInDate.toDateString()}</li>
-          <li><strong>Booking Amount:</strong> ${process.env.CURRENCY || "$"} ${
-        booking.totalPrice
-      } /night</li>
-        </ul>
-        <p>We look forward to welcoming you!</p>
-        <p>if you need to make any changes, feel free to contact us.</p>
-      `,
-    };
+    const emailHtml = `
+      <h2>Your Booking Details</h2>
+      <p>Dear ${user.username},</p>
+      <p>Thank you for choosing us. Here are your booking details:</p>
+      <ul>
+        <li><strong>Booking ID:</strong> ${booking._id}</li>
+        <li><strong>Hotel Name:</strong> ${roomData.hotel.name}</li>
+        <li><strong>Location:</strong> ${roomData.hotel.address}</li>
+        <li><strong>Date:</strong> ${booking.checkInDate.toDateString()}</li>
+        <li><strong>Booking Amount:</strong> ${process.env.CURRENCY || "$"} ${
+      booking.totalPrice
+    } /night</li>
+      </ul>
+      <p>We look forward to welcoming you!</p>
+      <p>if you need to make any changes, feel free to contact us.</p>
+    `;
 
     try {
-      await transporter.sendMail(mailOptions);
+      await sendEmail({
+        to: user.email,
+        subject: "Hotel Booking Details",
+        html: emailHtml,
+      });
     } catch (emailError) {
       console.error('Failed to send email:', emailError.message);
       // Don't fail the booking if email fails

@@ -9,8 +9,11 @@ MONGODB_URI=your_uri
 STRIPE_SECRET_KEY=your_key
 STRIPE_WEBHOOK_SECRET=your_key
 CLERK_WEBHOOK_SECRET=your_key
-SENDER_EMAIL=...
-SENDER_PASS=...
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REFRESH_TOKEN=your_google_refresh_token
+GOOGLE_REDIRECT_URI=your_redirect_uri
+GMAIL_USER_EMAIL=your_gmail_address@gmail.com
 
 # caching - Upstash Redis
 ENABLE_CACHE=true

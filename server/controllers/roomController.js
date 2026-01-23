@@ -59,8 +59,7 @@ export const getRooms = async (req, res) => {
       })
       .sort({ createdAt: -1 })
       .lean();
-    // Cache the result with longer TTL for better performance
-    await setJSON("rooms:all", rooms, 300);
+    await setJSON("rooms:all", rooms, 21600);
     res.json({ success: true, rooms });
   } catch (error) {
     res.json({ success: false, message: error.message });

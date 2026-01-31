@@ -51,7 +51,9 @@ export const getJSON = async (key) => {
   }
 };
 
-export const setJSON = async (key, value, ttlSeconds = 120) => {
+const TTL_SIX_HOURS = 21600;
+
+export const setJSON = async (key, value, ttlSeconds = TTL_SIX_HOURS) => {
   try {
     const c = await getClient();
     if (!c) return;

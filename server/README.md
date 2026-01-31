@@ -15,10 +15,11 @@ GOOGLE_REFRESH_TOKEN=your_google_refresh_token
 GOOGLE_REDIRECT_URI=your_redirect_uri
 GMAIL_USER_EMAIL=your_gmail_address@gmail.com
 
-# caching - Upstash Redis
+# caching - Redis
 ENABLE_CACHE=true
-REDIS_URL=https://your-upstash-rest-url
-REDIS_TOKEN=your-upstash-rest-token
+REDIS_HOST=your_redis_host
+REDIS_PORT=your_redis_port
+REDIS_PASSWORD=your_redis_password
 ```
 
 ## Quick Start
@@ -27,11 +28,3 @@ npm install
 npm start
 ```
 
-## Caching 
-- Read through cache for `GET /api/rooms` and `GET /api/cities` using Upstash Redis.
-- Enable by setting `ENABLE_CACHE=true` and providing `REDIS_URL` and `REDIS_TOKEN`.
-- Cache TTLs: rooms 120s, cities 6h. Cache is invalidated on writes.
-
-## Webhooks
-- Stripe: POST /api/stripe (checkout.session.completed)
-- Clerk: POST /api/clerk (user events)

@@ -1,22 +1,51 @@
-import { Redis } from "@upstash/redis";
+import { createClient } from "redis";
 
 const ENABLED = String(process.env.ENABLE_CACHE || "").toLowerCase() === "true";
 
 let client = null;
-if (ENABLED && process.env.REDIS_URL && process.env.REDIS_TOKEN) {
-  client = new Redis({
-    url: process.env.REDIS_URL,
-    token: process.env.REDIS_TOKEN,
-  });
+let connectPromise = null;
+
+async function getClient() {
+  if (
+    !ENABLED ||
+    !process.env.REDIS_HOST ||
+    !process.env.REDIS_PORT ||
+    !process.env.REDIS_PASSWORD
+  ) {
+    return null;
+  }
+  if (client?.isOpen) return client;
+  if (!connectPromise) {
+    const c = createClient({
+      username: "default",
+      password: process.env.REDIS_PASSWORD,
+      socket: {
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT) || 6379,
+      },
+    });
+    connectPromise = c.connect().then(() => {
+      client = c;
+      return c;
+    });
+  }
+  return connectPromise;
 }
 
-export const isCacheEnabled = () => Boolean(client);
+export const isCacheEnabled = () =>
+  Boolean(
+    ENABLED &&
+      process.env.REDIS_HOST &&
+      process.env.REDIS_PORT &&
+      process.env.REDIS_PASSWORD
+  );
 
 export const getJSON = async (key) => {
   try {
-    if (!client) return null;
-    const data = await client.get(key);
-    return data || null;
+    const c = await getClient();
+    if (!c) return null;
+    const data = await c.get(key);
+    return data ? JSON.parse(data) : null;
   } catch {
     return null;
   }
@@ -24,8 +53,9 @@ export const getJSON = async (key) => {
 
 export const setJSON = async (key, value, ttlSeconds = 120) => {
   try {
-    if (!client) return;
-    await client.set(key, value, { ex: ttlSeconds });
+    const c = await getClient();
+    if (!c) return;
+    await c.set(key, JSON.stringify(value), { EX: ttlSeconds });
   } catch {
     // ignore
   }
@@ -33,11 +63,10 @@ export const setJSON = async (key, value, ttlSeconds = 120) => {
 
 export const del = async (key) => {
   try {
-    if (!client) return;
-    await client.del(key);
+    const c = await getClient();
+    if (!c) return;
+    await c.del(key);
   } catch {
     // ignore
   }
 };
-
-
